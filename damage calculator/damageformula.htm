@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<style type="text/css">
+			input{
+				width: 110px;
+				text-align: left;
+				float: right;
+			}
+			
+			.submit{
+				width: 460px;
+				height: 40px;
+				float: left;
+				text-align: center;
+			}
+			
+			.radio{
+				width: 210px;
+				height: 40px;
+				float: left;
+				position:relative;
+				top:2px;
+			}
+			
+			.reset{
+				width: 200px;
+				height: 40px;
+				float: right;
+				text-align: center;
+			}
+			
+			.preset{
+				width: 55px;
+				height: 55px;
+				float: left;
+				text-align: center;
+				margin-right:5px;
+				margin-bottom:5px;
+				font: 10px/120% Tahoma, Arial, Verdana, sans-serif;
+				word-wrap:break-word;
+				white-space:normal;
+			}
+			
+			.presetArea{
+				position: absolute;
+				top:330px;
+				width: 240px;
+			}
+			
+			.topFrame {
+				float: left; 
+				width: 238px; 
+				padding: 0px 25px;
+				height: 580px;
+				background-color: #ffffff;
+			}	
+			
+			body {
+				font: 13px/120% Tahoma, Arial, Verdana, sans-serif;
+			}
+			
+			#attackerImage{
+				background-image: none;
+				background-repeat: no-repeat;
+				background-position: -100px 100px;
+			}
+			
+			#defenderImage{
+				background-image: none;
+				background-repeat: no-repeat;
+				background-position: -100px 100px;
+			}
+			
+			.flipX {
+				-moz-transform: scaleX(-1);
+				-webkit-transform: scaleX(-1);
+				-o-transform: scaleX(-1);
+				transform: scaleX(-1);
+				-ms-filter: fliph; /*IE*/
+				filter: fliph; /*IE*/
+			}
+			
+			.clear {
+				clear:both;
+			}
+			
+		</style>
+		<script type="text/javascript">
+		"use strict";
+		
+		var root = this;
+			
+	
+			
+			//attacker's stats
+			var aSTR; //= 220;				//Strength stat of attacker - Increases physical ability potency
+			var aMAG;// = 210;				//Magic stat of attacker - Increases magical ability potency
+			var aRANGE;// = 1.0;			//Range (modifier) of attacker - FAR=0.75; MID=1.0; NEAR=1.25 - only affects physical ability outcome
+			var aFOC;// = 220;				//Focus stat of attacker - Increases all accuracy of abilities used, increases Spirit regen when Focusing, reduces chance of receiving crits
+			var aCRT;// = 220;				//Crit stat of attacker - Increases chance of dealing crits
+
+			//defender's stats
+			var dDEF;// = 70;				//Defense stat of defender - Reduces physical damage received
+			var dRES;// = 210;				//Resist stat of defender - Reduces magical damage received
+			var dRANGE;// = 1.0;			//Range (modifier) of defender - FAR=0.75; MID=1.0; NEAR=1.25 - only affects physical ability outcome
+			var dFOC;// = 220;				//Focus stat of defender - Increases all accuracy of abilities used, increases Spirit regen when Focusing, reduces chance of receiving crits
+			var dEVA;// = 220;				//Evade stat of defender - Increases the chance for incoming attacks to MISS
+			var dSHL;// = 0.32;			//Shell stat of defender - Reduces the bonus multiplier to crits received
+
+			//properties of ability being used
+			var abilPWR;// = 15;				//Power rating of ability being used - Increases potency of ability
+			var abilPRC;// = null;				//???(Currently no use)
+			var abilMIN;// = 0.90;				//Determines lowest possible result of ability - hidden stat
+			var abilMAX;// = 1.05;				//Determines highest possible result of ability - hidden stat
+			var abilCRT;// = 50;				//Crit rating of ability being used - Increases severity of successful crit
+			var abilADDCRT;// = 0;				//Increases or decreases the chance that the ability will crit 
+			var abilACC;// = 75;				//Accuracy rating of ability being used - Affects chance to successfully hit with ability
+			
+			var elemRES = 1.0;
+			var resEARTH = 100;
+			var resFIRE = 100;
+			var resWATER = 100;
+			var resICE = 100;
+			var resELEC = 100;
+			var resNATURE = 100;
+			var resSPIRIT = 100;
+			var resWIND = 100;
+			var resTRUE = 100;
+			
+			//damage formulas
+			var critBNS;								//Multiplier for successful critical hits --(examples: .5 adds 50% to result, 0 adds no bonus)
+			var DMGRED;// = ((dDEF+aSTR)/(dDEF+100))*0.05;	
+			var DMGRAW;// = aSTR*abilPWR;					//DMGRAW is the simple raw result of the ability used. DMGRED determines the amount of DMGRAW that is allowed through
+			var DMGMOD;						//Total of all modifiers to be multiplied into formula -- will determine whether the result is overall higher or lower than normal
+			var DMGLOW;						//Lowest possible final result
+			var DMGHIGH;					//Highest possible final result
+			var DMGTOTAL;
+			//var DMGFLAT = DMGRAW*DMGRED;	//Unmodified, unrandomized, exact result of ability based on Strength vs Defense (Currently no use)
+			
+			//hit chance formulas
+			var HITROLL;// = ROLLRANDOM();					//Rolls a number 0-100, including decimals. If this number is LOWER than HITCHANCE, the ability successfully hits
+			var HITCHANCE;// = ((aFOC+300)/(dEVA+300))*abilACC;	
+																//HITCHANCE is the determined chance to hit, as a number including decimals, not necessarily between 0 and 100
+			//crit chance formulas
+			var CRITROLL;// = ROLLRANDOM();				//Rolls a number 0-100, including decimals. If this number is LOWER than CRITCHANCE, the ability successfully crits
+			var CRITCHANCE;// = (((aCRT+dFOC)/(dFOC+100))*10)+abilADDCRT;
+																//CRITCHANCE is the determined chance to crit, as a number including decimals, not necessarily below 100
+																
+			
+			
+			//Preset eidol stats
+			var presetDoggie =	 {STR:298, MAG:165, FOC:280, CRT:285, DEF:340, RES:205, EVA:284, SHL:22, SPD:105, resEARTH:89,  resFIRE:93,  resWATER:100, resICE:95,  resNATURE:115, resELEC:105, resSPIRIT:95,  resWIND:100, health:1377, spirit:780,   IMG:"image_alunari.jpg"};		//doggie
+			var presetKitty =	 {STR:273, MAG:175, FOC:367, CRT:412, DEF:218, RES:219, EVA:388, SHL:8,  SPD:123, resEARTH:80,  resFIRE:85,  resWATER:115, resICE:105, resNATURE:85,  resELEC:75,  resSPIRIT:100, resWIND:100, health:1186, spirit:815,   IMG:"image_terragaris.jpg"};	//kitty
+			var presetBirdie =	 {STR:142, MAG:411, FOC:412, CRT:112, DEF:137, RES:315, EVA:380, SHL:12, SPD:128, resEARTH:75,  resFIRE:110, resWATER:100, resICE:110, resNATURE:100, resELEC:100, resSPIRIT:80,  resWIND:80,  health:895,  spirit:1464,  IMG:"image_shrive.jpg"};		//birdie
+			var presetFishie =	 {STR:215, MAG:222, FOC:311, CRT:210, DEF:215, RES:252, EVA:385, SHL:16, SPD:105, resEARTH:110, resFIRE:80,  resWATER:60,  resICE:90,  resNATURE:100, resELEC:130, resSPIRIT:100, resWIND:100, health:1442, spirit:903,   IMG:"none"};					//fishie
+			var presetLizard =	 {STR:263, MAG:202, FOC:360, CRT:112, DEF:244, RES:220, EVA:321, SHL:18, SPD:98,  resEARTH:95,  resFIRE:80,  resWATER:100, resICE:115, resNATURE:90,  resELEC:95,  resSPIRIT:100, resWIND:100, health:1690, spirit:788,   IMG:"none"};					//lizard
+			var presetGhost =	 {STR:110, MAG:453, FOC:418, CRT:88,  DEF:658, RES:245, EVA:215, SHL:32, SPD:107, resEARTH:115, resFIRE:120, resWATER:100, resICE:85,  resNATURE:45,  resELEC:110, resSPIRIT:155, resWIND:100, health:612,  spirit:2231,  IMG:"image_wyrid.jpg"};		//ghost
+			var presetBear =	 {STR:412, MAG:114, FOC:217, CRT:321, DEF:394, RES:147, EVA:189, SHL:25, SPD:95,  resEARTH:88,  resFIRE:94,  resWATER:100, resICE:105, resNATURE:115, resELEC:95,  resSPIRIT:110, resWIND:100, health:2183, spirit:488,   IMG:"none"};					//bear
+			var presetPlant =	 {STR:342, MAG:241, FOC:140, CRT:225, DEF:520, RES:204, EVA:139, SHL:45, SPD:88,  resEARTH:87,  resFIRE:138, resWATER:83,  resICE:112, resNATURE:50,  resELEC:100, resSPIRIT:115, resWIND:100, health:1880, spirit:794,   IMG:"image_briermisk.jpg"};	//plant
+			var presetBug =		 {STR:120, MAG:244, FOC:356, CRT:641, DEF:126, RES:245, EVA:522, SHL:3,  SPD:150, resEARTH:90,  resFIRE:125, resWATER:100, resICE:110, resNATURE:90,  resELEC:100, resSPIRIT:110, resWIND:95,  health:769,  spirit:1075,  IMG:"none"};					//bug
+			var presetHellbat =	 {STR:184, MAG:422, FOC:315, CRT:295, DEF:217, RES:318, EVA:477, SHL:11, SPD:119, resEARTH:89,  resFIRE:75,  resWATER:125, resICE:95,  resNATURE:100, resELEC:100, resSPIRIT:100, resWIND:90,  health:889,  spirit:1106,  IMG:"none"};					//hellbat
+			var presetIceMouse = {STR:130, MAG:483, FOC:297, CRT:489, DEF:168, RES:343, EVA:511, SHL:6,  SPD:114, resEARTH:100, resFIRE:130, resWATER:105, resICE:85,  resNATURE:100, resELEC:105, resSPIRIT:100, resWIND:100, health:803,  spirit:1855,  IMG:"image_snowsnip.jpg"};	//icemouse
+			var presetKor =		 {STR:338, MAG:151, FOC:238, CRT:466, DEF:582, RES:450, EVA:142, SHL:86, SPD:76,  resEARTH:80,  resFIRE:80,  resWATER:85,  resICE:85,  resNATURE:80,  resELEC:80,  resSPIRIT:100, resWIND:100, health:3240, spirit:352,   IMG:"none"};					//kor
+			var presetMagikarp = {STR:"SPLASH", MAG:"SPLASH", FOC:"SPLASH", CRT:"SPLASH", DEF:"ACCEPT FATE", RES:"ACCEPT FATE", EVA:"ACCEPT FATE", SHL:"ACCEPT FATE"};
+			
+			//Preset ability properties
+			var abilityAttack = 	{abilPWR:10, abilACC:110, abilCRT:50,  abilADDCRT:0,  abilMIN:0.7,  abilMAX:1.05};
+			var abilityClaw = 	 	{abilPWR:12, abilACC:92,  abilCRT:60,  abilADDCRT:3,  abilMIN:0.75, abilMAX:1.05};
+			var abilityBite = 	 	{abilPWR:15, abilACC:76,  abilCRT:80,  abilADDCRT:7,  abilMIN:0.7,  abilMAX:1.15};
+			var abilityHiCrit = 	{abilPWR:10, abilACC:95,  abilCRT:35,  abilADDCRT:50, abilMIN:0.8,  abilMAX:1.05};
+			var abilityAccurate = 	{abilPWR:10, abilACC:300, abilCRT:20,  abilADDCRT:5,  abilMIN:0.7,  abilMAX:0.9};
+			var abilityRisky = 		{abilPWR:18, abilACC:82,  abilCRT:65,  abilADDCRT:3,  abilMIN:0.25, abilMAX:1.45};
+			var abilityCrush = 		{abilPWR:24, abilACC:68,  abilCRT:120, abilADDCRT:12, abilMIN:0.75, abilMAX:1.1};
+			var abilityLoRandom = 	{abilPWR:14, abilACC:90,  abilCRT:10,  abilADDCRT:0,  abilMIN:0.97, abilMAX:1.02};
+			var abilitySlash = 		{abilPWR:11, abilACC:142, abilCRT:85,  abilADDCRT:3,  abilMIN:0.8,  abilMAX:1.1};
+			var abilityHeal = 		{abilPWR:12, abilACC:755, abilCRT:50,  abilADDCRT:0,  abilMIN:0.8,  abilMAX:1.05};
+			var abilityRiskyHeal = 	{abilPWR:8,  abilACC:755, abilCRT:350, abilADDCRT:22, abilMIN:0.6,  abilMAX:1.4};
+			
+			//default values (for reset button)
+			var presetDefault =  {STR:220, MAG:220, FOC:220, CRT:220, DEF:220, RES:220, EVA:220, SHL:20, abilPWR:10, abilACC:110, abilCRT:50, abilADDCRT:0, abilMIN:0.7, abilMAX:1.05, SPD:100, resEARTH:100,  resFIRE:100,  resWATER:100, resICE:100,  resNATURE:100, resELEC:100, resSPIRIT:100,  resWIND:100, health:1000, spirit:1000, IMG:"none"};
+			
+			
+			
+			function ROLLRANDOM()
+				{
+					var ROLLRANDOM = Math.random()*100;
+					return(ROLLRANDOM);
+				}
+			
+			
+			function getDmg()		//formula and message for an ability that hits, but does not crit
+				{
+					critBNS = (abilCRT-(abilCRT*(dSHL*0.01)))/100;
+					DMGMOD = parseFloat(aRANGE*dRANGE);
+					DMGLOW = parseInt(DMGRAW*DMGRED*DMGMOD*abilMIN,"10");
+					DMGHIGH = parseInt(DMGRAW*DMGRED*DMGMOD*abilMAX,"10");
+					DMGTOTAL = Math.floor(Math.random()*(DMGHIGH-DMGLOW+1))+DMGLOW;
+					//return(DMGTOTAL+" (Calculated between "+DMGLOW+" and "+DMGHIGH+")");
+					return(DMGTOTAL);
+				}
+				
+				
+			function getDmgCrit()	//formula and message for an ability that hits and successfully crits
+				{
+					critBNS = (abilCRT-(abilCRT*(dSHL*0.01)))/100;
+					DMGMOD = (aRANGE*dRANGE)+critBNS;
+					DMGLOW = parseInt(DMGRAW*DMGRED*DMGMOD*abilMIN,"10");
+					DMGHIGH = parseInt(DMGRAW*DMGRED*DMGMOD*abilMAX,"10");
+					DMGTOTAL = Math.floor(Math.random()*(DMGHIGH-DMGLOW+1))+DMGLOW;
+					return(DMGTOTAL+" CRIT!");
+				}
+				
+				
+			function CALCULATE(){
+				clearNode();
+				
+				
+				//Checks whether an attack is physical or magical. If magical, replaces STR and DEF with MAG and RES, to calculate damage
+				if(document.getElementById("magical").checked == true)
+					{
+						aSTR = document.getElementById('aMAG').value;
+						dDEF = document.getElementById('dRES').value;
+						aRANGE = 1.0;
+						dRANGE = 1.0;
+					}
+					else
+					{
+						aSTR = document.getElementById('aSTR').value;
+						dDEF = document.getElementById('dDEF').value;
+						findRange();
+					}
+				
+				//Take numbers from fields and apply them to the corresponding variables, then use formulas to determine other values
+				findResist();
+				aFOC = document.getElementById('aFOC').value; 
+				aCRT = document.getElementById('aCRT').value; 
+				abilPWR = document.getElementById('abilPWR').value; 
+				abilACC = document.getElementById('abilACC').value;
+				abilCRT = document.getElementById('abilCRT').value; 
+				abilADDCRT = document.getElementById('abilADDCRT').value; 
+				abilMIN = document.getElementById('abilMIN').value; 
+				abilMAX = document.getElementById('abilMAX').value;
+				dFOC = document.getElementById('dFOC').value; 
+				dEVA = document.getElementById('dEVA').value;
+				dSHL = document.getElementById('dSHL').value;
+				DMGRAW = aSTR*abilPWR;
+				DMGMOD = (aRANGE*dRANGE*elemRES)+critBNS; //alert(elemRES);
+				DMGLOW = parseInt(DMGRAW*DMGRED*DMGMOD*abilMIN,10);
+				DMGHIGH = parseInt(DMGRAW*DMGRED*DMGMOD*abilMAX,10);
+				DMGRED = (parseInt(dDEF,10)+parseInt(aSTR,10))/(parseInt(dDEF,10)+50)*0.05;
+				HITCHANCE = (parseInt(aFOC,10)+300)/(parseInt(dEVA,10)+400)*abilACC;
+				CRITCHANCE = (((parseInt(aCRT,10)+parseInt(dFOC,10))/(parseInt(dFOC,10)+100)*10))+parseInt(abilADDCRT,10); 
+				HITROLL = ROLLRANDOM();
+				CRITROLL = ROLLRANDOM();
+				
+				
+				
+				//Rolls to determine whether the ability misses, hits, or crits
+				if(HITROLL >= HITCHANCE)	//if the rolled number is greater than the chance to hit, the ability misses and outputs this step. Otherwise, move to next step
+					{
+						critBNS = 0;
+						DMGTOTAL = Math.floor(Math.random()*(DMGHIGH-DMGLOW+1))+DMGLOW;
+						var RESULT = "Miss!";
+					}
+					
+					else if(CRITROLL >= CRITCHANCE)		//if the next rolled number is greater than the chance to crit, the ability does NOT crit, and outputs this step. Otherwise, move to next step
+						{
+							critBNS = 0;
+							DMGTOTAL = Math.floor(Math.random()*(DMGHIGH-DMGLOW+1))+DMGLOW;
+							var RESULT = getDmg();
+						}
+							else						//Final possible outcome -- reaching this means the ability landed successfully hit and was a critical hit
+								{
+										critBNS = (abilCRT-(abilCRT*(dSHL*0.01)))/100;
+										DMGTOTAL = Math.floor(Math.random()*(DMGHIGH-DMGLOW+1))+DMGLOW;
+										var RESULT = getDmgCrit();
+								}
+				
+				var ANSNode = document.createTextNode(RESULT);
+				document.getElementById('calcBox').appendChild(ANSNode);
+				
+				var nodeMIN = document.createTextNode("Lowest possible outcome (crit): " + parseInt(DMGRAW*aRANGE*dRANGE*elemRES*DMGRED*abilMIN,10) + " (" + parseInt((DMGRAW*aRANGE*dRANGE*elemRES*DMGRED*abilMIN)*(parseFloat((abilCRT-(abilCRT*(dSHL*0.01)))/100)+1),10) + ")");
+				document.getElementById('resultMIN').appendChild(nodeMIN);
+				
+				var nodeMAX = document.createTextNode("Highest possible outcome (crit): " + parseInt(DMGRAW*aRANGE*dRANGE*elemRES*DMGRED*abilMAX,10) + " (" + parseInt((DMGRAW*aRANGE*dRANGE*elemRES*DMGRED*abilMAX)*(parseFloat((abilCRT-(abilCRT*(dSHL*0.01)))/100)+1),10) + ")");
+				document.getElementById('resultMAX').appendChild(nodeMAX);
+				
+				var nodeHITCHANCE = document.createTextNode("Overall chance to hit: " + HITCHANCE + "%");
+				document.getElementById('resultHITCHANCE').appendChild(nodeHITCHANCE);
+				
+				var nodeCRITCHANCE = document.createTextNode("Overall chance to crit: " + CRITCHANCE + "%");
+				document.getElementById('resultCRITCHANCE').appendChild(nodeCRITCHANCE);
+				
+				var nodeCRITBNS = document.createTextNode("Crit bonus: " + parseFloat(abilCRT-(abilCRT*(dSHL*0.01))) +"%");
+				document.getElementById('resultCRITBNS').appendChild(nodeCRITBNS);
+				
+			}
+			
+			function clearNode(){
+				var tar1 = document.getElementById('calcBox');
+				var tar2 = document.getElementById('resultMIN');
+				var tar3 = document.getElementById('resultMAX');
+				var tar4 = document.getElementById('resultHITCHANCE');
+				var tar5 = document.getElementById('resultCRITCHANCE');
+				var tar6 = document.getElementById('resultCRITBNS');
+				
+				while(tar1.hasChildNodes()){
+					tar1.removeChild(tar1.firstChild);
+				}
+				while(tar2.hasChildNodes()){
+					tar2.removeChild(tar2.firstChild);
+				}
+				while(tar3.hasChildNodes()){
+					tar3.removeChild(tar3.firstChild);
+				}
+				while(tar4.hasChildNodes()){
+					tar4.removeChild(tar4.firstChild);
+				}
+				while(tar5.hasChildNodes()){
+					tar5.removeChild(tar5.firstChild);
+				}
+				while(tar6.hasChildNodes()){
+					tar6.removeChild(tar6.firstChild);
+				}
+			}
+			
+			function setPresetsAttacker(attacker){
+				document.getElementById("aSTR").setAttribute("value", attacker.STR);
+				document.getElementById("aMAG").setAttribute("value", attacker.MAG);
+				document.getElementById("aFOC").setAttribute("value", attacker.FOC);
+				document.getElementById("aCRT").setAttribute("value", attacker.CRT);
+			}
+			
+			function setPresetsAbility(ability){
+				document.getElementById("abilPWR").setAttribute("value", ability.abilPWR);
+				document.getElementById("abilACC").setAttribute("value", ability.abilACC);
+				document.getElementById("abilCRT").setAttribute("value", ability.abilCRT);
+				document.getElementById("abilADDCRT").setAttribute("value", ability.abilADDCRT);
+				document.getElementById("abilMIN").setAttribute("value", ability.abilMIN);
+				document.getElementById("abilMAX").setAttribute("value", ability.abilMAX);
+			}
+			
+			function setPresetsDefender(defender){
+				document.getElementById("dDEF").setAttribute("value", defender.DEF);
+				document.getElementById("dRES").setAttribute("value", defender.RES);
+				document.getElementById("dFOC").setAttribute("value", defender.FOC);
+				document.getElementById("dEVA").setAttribute("value", defender.EVA);
+				document.getElementById("dSHL").setAttribute("value", defender.SHL);
+				resEARTH = defender.resEARTH;
+				resFIRE = defender.resFIRE;
+				resWATER = defender.resWATER;
+				resICE = defender.resICE;
+				resELEC = defender.resELEC;
+				resNATURE = defender.resNATURE;
+				resSPIRIT = defender.resSPIRIT;
+				resWIND = defender.resWIND;
+			}
+			
+			function setAttackerImage(attacker){
+				var newAttImage = "url("+attacker.IMG+")";
+     			document.getElementById('attackerImage').style.backgroundImage = newAttImage;
+			}
+			
+			function setDefenderImage(defender){
+				var newDefImage = "url("+defender.IMG+")";
+     			document.getElementById('defenderImage').style.backgroundImage = newDefImage;
+			}
+			
+			
+			function findRange(){
+			//Checks the range of attacker and defender and sets the variables to be used in modifiers
+				if(document.getElementById("attackerNormal").checked == true) 
+					{
+						aRANGE = 1.0;
+					}
+					else if(document.getElementById("attackerClose").checked == true)
+					{
+						aRANGE = 1.15;
+					}
+					else
+					{
+						aRANGE = 0.8;
+					}
+					
+				if(document.getElementById("defenderNormal").checked == true)
+					{
+						dRANGE = 1.0;
+					}
+					else if(document.getElementById("defenderClose").checked == true)
+					{
+						dRANGE = 1.25;
+					}
+					else
+					{
+						dRANGE = 0.85;
+					}
+			}
+			
+			function findResist(){
+					elemRES = parseFloat(root[document.getElementById('attackElement').value])*.01;
+				//	alert("type: "+document.getElementById('attackElement').value);
+				//	alert("resistance: "+elemRES);
+			}
+			
+			
+			//var fox = ["220","300","2.0"];
+			//var hippo = ["220","300","2.0"];
+			
+			//for( var i = 0; i < 3; i++ ){
+				//alert(fox[i]);
+			//}
+				
+				
+		</script>
+	
+	</head>
+	<body>
+    
+    <div id="defenderImage" class="flipX">
+    <div id="attackerImage" class="flipX">
+  		
+        <div style="margin: 0 auto; width: 870px">
+            <div class="topFrame" style="border-top: 1px solid black; border-bottom: 1px solid black; border-left: 1px solid black;">
+                <p><strong>Attacker's stats</strong></p>
+                <form id="attackForm">
+                    <p>STR: &nbsp;<input id="aSTR" type="text" value="220" /></p>
+                    <p>MAG: &nbsp;<input id="aMAG" type="text" value="220" /></p>
+                    <p>FOC: &nbsp;<input id="aFOC" type="text" value="220" /></p>
+                    <p>CRT: &nbsp;<input id="aCRT" type="text" value="220" /></p>
+                    <p style="margin-top:40px;"><strong>Range:</strong></p>
+                    <p><input name="attackerRange" id="attackerClose" type="radio" value="close" />Close</p>
+                    <p><input name="attackerRange" id="attackerNormal" type="radio" value="normal" checked />Normal</p>
+                    <p><input name="attackerRange" id="attackerFar" type="radio" value="far" />Far</p>
+                </form>
+                <div class="presetArea">
+                <p><strong>Presets:</strong></p>
+                    <input class="preset" type="image" src="thumb_alunari.png" alt="Alunari" onClick="setPresetsAttacker(presetDoggie); setAttackerImage(presetDoggie);" />
+                    <input class="preset" type="image" src="thumb_terragaris.png" alt="Terragaris" onClick="setPresetsAttacker(presetKitty); setAttackerImage(presetKitty);" />
+                    <input class="preset" type="image" src="thumb_shrive.png" alt="Shrive" onClick="setPresetsAttacker(presetBirdie); setAttackerImage(presetBirdie);" />
+                    <input class="preset" type="submit" value="Quiller (Fishie)" onClick="setPresetsAttacker(presetFishie); setAttackerImage(presetFishie);" />
+                    <input class="preset" type="submit" value="Frillid (Lizard)" onClick="setPresetsAttacker(presetLizard); setAttackerImage(presetLizard);" />
+                    <input class="preset" type="image" src="thumb_wyrid.png" alt="Wyrid" onClick="setPresetsAttacker(presetGhost); setAttackerImage(presetGhost);" />
+                    <input class="preset" type="submit" value="Giarl (Bear)" onClick="setPresetsAttacker(presetBear); setAttackerImage(presetBear);" />
+                    <input class="preset" type="image" src="thumb_briermisk.png" alt="Briermisk" onClick="setPresetsAttacker(presetPlant); setAttackerImage(presetPlant);" />
+                    <input class="preset" type="submit" value="Zeele (Bug)" onClick="setPresetsAttacker(presetBug); setAttackerImage(presetBug);" />
+                    <input class="preset" type="submit" value="Giara (Hellbat)" onClick="setPresetsAttacker(presetHellbat); setAttackerImage(presetHellbat);" />
+                    <input class="preset" type="image" src="thumb_snowsnip.png" alt="Snowsnip" onClick="setPresetsAttacker(presetIceMouse); setAttackerImage(presetIceMouse);" />
+                    <input class="preset" type="submit" value="Kor" onClick="setPresetsAttacker(presetKor); setAttackerImage(presetKor);" />
+                </div>
+            </div>
+            <div class="topFrame" style="border: 1px solid black;">
+                <p><strong>Ability used</strong></p>
+                <form id="abilityForm">
+                    <p>abilPWR: &nbsp;<input id="abilPWR" type="text" value="10" /></p>
+                    <p>abilACC: &nbsp;<input id="abilACC" type="text" value="110" /></p>
+                    <p>abilCRT: &nbsp;<input id="abilCRT" type="text" value="50" /></p>
+                    <p>abilADDCRT: &nbsp;<input id="abilADDCRT" type="text" value="0" /></p>
+                    <p>abilMIN: &nbsp;<input id="abilMIN" type="text" value="0.7" /></p>
+                    <p>abilMAX: &nbsp;<input id="abilMAX" type="text" value="1.05" /></p>
+                    <p style="margin-top:30px;"><strong>Element:</strong></p>
+                    <select id="attackElement">
+                    	<option id="elementNone" value="resTRUE" selected="selected" >No element</option>
+                    	<option id="elementEarth" value="resEARTH">Earth</option>
+                    	<option id="elementFire" value="resFIRE">Fire</option>
+                    	<option id="elementWater" value="resWATER">Water</option>
+                    	<option id="elementIce" value="resICE">Ice</option>
+                    	<option id="elementElectric" value="resELEC">Electric</option>
+                    	<option id="elementNature" value="resNATURE">Nature</option>
+                    	<option id="elementSpirit" value="resSPIRIT">Spirit</option>
+                    	<option id="elementWind" value="resWIND">Wind</option>
+                    </select>
+                </form>
+                <div class="presetArea">
+               		<p><strong>Presets:</strong></p>
+	                <input class="preset" type="submit" value="Attack" onClick="setPresetsAbility(abilityAttack);" />
+	                <input class="preset" type="submit" value="Claw" onClick="setPresetsAbility(abilityClaw);" />
+	                <input class="preset" type="submit" value="Bite" onClick="setPresetsAbility(abilityBite);" />
+	                <input class="preset" type="submit" value="Critical Fang" onClick="setPresetsAbility(abilityHiCrit);" />
+	                <input class="preset" type="submit" value="Precise Strike" onClick="setPresetsAbility(abilityAccurate);" />
+	                <input class="preset" type="submit" value="Desperate Swipe" onClick="setPresetsAbility(abilityRisky);" />
+	                <input class="preset" type="submit" value="Crush" onClick="setPresetsAbility(abilityCrush);" />
+	                <input class="preset" type="submit" value="Planned Strike" onClick="setPresetsAbility(abilityLoRandom);" />
+	                <input class="preset" type="submit" value="Slash" onClick="setPresetsAbility(abilitySlash);" />
+	                <input class="preset" type="submit" value="Heal" onClick="setPresetsAbility(abilityHeal);" />
+	                <input class="preset" type="submit" value="Hopeful Heal" onClick="setPresetsAbility(abilityRiskyHeal);" />
+				</div>
+            </div>
+            <div class="topFrame" style="border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;">
+                <p><strong>Defender's stats</strong></p>
+                <form id="defendForm">
+                    <p>DEF: &nbsp;<input id="dDEF" type="text" value="220" /></p>
+                    <p>RES: &nbsp;<input id="dRES" type="text" value="220" /></p>
+                    <p>FOC: &nbsp;<input id="dFOC" type="text" value="220" /></p>
+                    <p>EVA: &nbsp;<input id="dEVA" type="text" value="220" /></p>
+                    <p>SHL: &nbsp;<input id="dSHL" type="text" value="20" /></p>
+                    <p><strong>Range:</strong></p>
+                    <p><input name="defenderRange" id="defenderClose" type="radio" value="close" />Close</p>
+                    <p><input name="defenderRange" id="defenderNormal" type="radio" value="normal" checked />Normal</p>
+                    <p><input name="defenderRange" id="defenderFar" type="radio" value="far" />Far</p>
+                </form>
+                <div class="presetArea">
+                	<p><strong>Presets:</strong></p>
+                    <input class="preset" type="image" src="thumb_alunari.png" alt="Alunari" onClick="setPresetsDefender(presetDoggie); setDefenderImage(presetDoggie);" />
+                    <input class="preset" type="image" src="thumb_terragaris.png" alt="Terragaris" onClick="setPresetsDefender(presetKitty); setDefenderImage(presetKitty);" />
+                    <input class="preset" type="image" src="thumb_shrive.png" alt="Shrive" onClick="setPresetsDefender(presetBirdie); setDefenderImage(presetBirdie);" />
+                    <input class="preset" type="submit" value="Quiller (Fishie)" onClick="setPresetsDefender(presetFishie); setDefenderImage(presetFishie);" />
+                    <input class="preset" type="submit" value="Frillid (Lizard)" onClick="setPresetsDefender(presetLizard); setDefenderImage(presetLizard);" />
+                    <input class="preset" type="image" src="thumb_wyrid.png" alt="Wyrid" onClick="setPresetsDefender(presetGhost); setDefenderImage(presetGhost);" />
+                    <input class="preset" type="submit" value="Giarl (Bear)" onClick="setPresetsDefender(presetBear); setDefenderImage(presetBear);" />
+                    <input class="preset" type="image" src="thumb_briermisk.png" alt="Briermisk" onClick="setPresetsDefender(presetPlant); setDefenderImage(presetPlant);" />
+                    <input class="preset" type="submit" value="Zeele (Bug)" onClick="setPresetsDefender(presetBug); setDefenderImage(presetBug);" />
+                    <input class="preset" type="submit" value="Giara (Hellbat)" onClick="setPresetsDefender(presetHellbat); setDefenderImage(presetHellbat);" />
+                    <input class="preset" type="image" src="thumb_snowsnip.png" alt="Snowsnip" onClick="setPresetsDefender(presetIceMouse); setDefenderImage(presetIceMouse);" />
+                    <input class="preset" type="submit" value="Kor" onClick="setPresetsDefender(presetKor); setDefenderImage(presetKor);" />
+				</div>
+            </div>
+            <div class="clear" />
+            <div class="radio">
+            	<strong>Type:</strong>
+                <div style="float:right;">
+                    <input name="attacktype" id="physical" type="radio" value="physical" checked />Physical<br />
+                    <input name="attacktype" id="magical" type="radio" value="magical" />Magical
+                </div>
+            </div>
+            <input class="submit" type="submit" value="Test Results" onClick="CALCULATE();" />
+            <input class="reset" type="submit" value="Reset All Fields to Defaults" onClick="setPresetsAttacker(presetDefault); setPresetsDefender(presetDefault); setPresetsAbility(presetDefault); setAttackerImage(presetDefault); setDefenderImage(presetDefault);" /></p>
+            <div class="clear" />
+
+            <div style="width:867px; height:70px; border:1px solid #000; float: left; line-height: 10px; text-align: center;">
+            	<p><strong>Test Roll Result</strong></p>
+            	<div id="calcBox">
+            	
+            	</div>
+            </div>
+            
+            <div style="width:857px; border:1px solid #000; padding-left: 10px; padding-bottom: 10px;">
+            	<p><strong>Results</strong></p>
+            	<div id="resultMIN"></div>
+            	<div id="resultMAX"></div>
+            	<div id="resultHITCHANCE"></div>
+            	<div id="resultCRITCHANCE"></div>
+            	<div id="resultCRITBNS"></div>
+            </div>
+            <div style="width:847px; border:1px solid #000; padding: 10px;">
+            	<p><strong>Notes about stats</strong></p>
+                <p><strong>STR:</strong> Strength - Increases potency of physical abilities (60-800)</p>
+                <p><strong>MAG:</strong> Magic - Increases potency of magical abilities (Not used here) (60-800)</p>
+                <p><strong>FOC:</strong> Focus - Increases chance to hit, decreases chance of receiving a crit (60-800)</p>
+                <p><strong>CRT:</strong> Crit - Increases chance of a successful hit being a crit (60-800)</p>
+                <p><strong>DEF:</strong> Defense - Reduces physical damage received (60-800)</p>
+                <p><strong>RES:</strong> Resist - Reduces magical damage received (Not used here) (60-800)</p>
+                <p><strong>EVA:</strong> Evade - Reduces chance of being hit (60-800)</p>
+                <p><strong>SHL:</strong> Shell - Reduces the bonus of a received crit (for example, 35 SHL reduces a crit's <em>BONUS</em> damage by 35%) (0-100)</p>
+                <p><strong>abilPWR:</strong> Ability Power - Increases potency of ability used (5-50)</p>
+                <p><strong>abilACC:</strong> Ability Accuracy - Affects chance to hit with ability (10-200)</p>
+                <p><strong>abilCRT:</strong> Ability Crit - Critical hit bonus with ability, as a percentage of damage result (0-200)</p>
+                <p><strong>abilCRTADD:</strong> Ability Crit Chance Bonus - Raises or lowers chance to crit with ability, simply adds or subtracts to the chance (-100 to 100) </p>
+                <p><strong>abilMIN:</strong> Ability Min Damage Modifier - Multiplied into flat damage output to determine lowest possible final outcome (.2-1.2) </p>
+                <p><strong>abilMAX:</strong> Ability Max Damage Modifier - Multiplied into flad damage output to determine highest possible final outcome (.8-3)</p>
+                <p><strong>Normal Range:</strong> No modifiers to outcome -- All Ranges <em>ONLY</em> affect physical abilities</p>
+                <p><strong>Close Range:</strong> As attacker: increases damage dealt by 15%; as defender: increases damage received by 20%</p>
+                <p><strong>Normal Range:</strong> As attacker: reduces damage dealt by 25%; as defender: reduces damage received by 15%</p>
+                <p style="margin-top: 40px;">Numbers in parentheses are recommended value ranges, but do not neccessarily have to fall strictly within these bounds.</p>
+            </div>
+        </div>
+	
+    </div>
+    </div>
+    </div>
+    
+	</body>
+
+</html>
