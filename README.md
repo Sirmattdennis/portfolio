@@ -12,6 +12,7 @@ of exactly 1300px wide, and the instruction to "make sure it's responsive".
 The old outdated design is still active, so until the new one is finalized, 
 I can only provide page screenshots. These screenshots show the responsiveness of the design, 
 displaying a page in narrow, medium, and wide browsers. More can be taken and provided upon request.
+
 __URL:__ www.ctconline.com __(*PLEASE NOTE:* This is the current website, as it was long before I joined CTC. I did not build this.)__
 
 ---
