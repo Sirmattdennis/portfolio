@@ -4,7 +4,7 @@ Code files, images, links, and anything else I have to share
 
 ---
 
-### "CTC" Images:
+#### "CTC" Images:
 My currently ongoing task is a complete redesign of the Connection Technology Center website. 
 No simple challenge, considering I am the sole web dev dedicated to it. Design-wise, 
 the entirety of what I had to go on was a single PSD containing three page layouts for a browser 
@@ -18,7 +18,7 @@ __URL:__ www.ctconline.com
 
 ---
 
-### "Everwilde" Images:
+#### "Everwilde" Images:
 A small website built to showcase an inn and spa project proposal. 
 Nothing too out of the ordinary here, but I only had a total of two work days to design and build the site. 
 
@@ -26,7 +26,7 @@ __URL:__ www.everwildeinnandspa.com
 
 ---
 
-### Eagle Productivity Solutions:
+#### Eagle Productivity Solutions:
 As part of the team of interactive developers, I helped to create interactive learning tools 
 for clients primarily in the field of pharmaceuticals. Projects included e-learning courses, 
 to e-blasts, software simulations, and more. As much of the work is built for private use, 
@@ -36,7 +36,7 @@ __URL:__ www.eagleproductivity.com/interactive.html
 
 ---
 
-### A Skewed Paradise Comics:
+#### A Skewed Paradise Comics:
 Running from 2007-2010, A Skewed Paradise was a webcomic and personal website. 
 While it is now a bit dated in both design and tech, it was a long-running 
 learning experience in designing, building, and maintaining a website. 
@@ -49,7 +49,7 @@ __URL:__ www.aspcomics.net
 
 ---
 
-### "Damage Calculator":
+#### "Damage Calculator":
 An old little project I built with a single html/js file and some images. 
 Code-wise, nothing particularly out of the ordinary, but even to this day, 
 it's fun to play around with the many values, buttons, and options, 
