@@ -2,7 +2,7 @@
 Code files, images, links, and anything else I have to share
 
 "CTC" Images:
-	My currently ongoing task is a complete redesign of the Connection Technology Center website. No small task, considering I am the sole web dev dedicated to it. Design-wise, the entirety of what I had to go on was a single PSD containing three page layouts, suitable for exactly 1300px wide browser windows. The old outdated design is still active, so until the new one is finalized, I can only provide page screenshots. More can be provided upon request.
+	My currently ongoing task is a complete redesign of the Connection Technology Center website. No simple challenge, considering I am the sole web dev dedicated to it. Design-wise, the entirety of what I had to go on was a single PSD containing three page layouts for a browser of exactly 1300px wide, and the instruction to "make sure it's responsive". The old outdated design is still active, so until the new one is finalized, I can only provide page screenshots. These screenshots show the responsiveness of the design, displaying a page in narrow, medium, and wide browsers. More can be taken and provided upon request.
 URL: www.ctconline.com (PLEASE NOTE: This is the current website, as it was long before I joined CTC. I did not build this.)
 
 "Everwilde" Images:
