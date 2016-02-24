@@ -1,0 +1,139 @@
+<!doctype html>
+
+<html lang="en">
+    
+<head>
+    <title>Penny Cloud - Watch your pennies pile up!</title>
+</head>
+
+<body>
+    <form>
+        <strong>Income:</strong><br>
+        $&nbsp;<input type="text" id="sal" name="sal" value="0.00" style="width:75px;">&nbsp;<em>(e.g. 10.75 or 22)</em><br>
+        <input type="radio" id="hour" name="saltype" value="hour" checked>per hour<br>
+        <input type="radio" id="year" name="saltype" value="year">per year<br>
+    </form><br>
+    
+    <button id="start">Start</button>
+    <button id="pause" disabled>Pause</button>
+    <button id="clear" disabled>Clear</button>
+    
+    <h1>
+        <span id="time">00:00:00</span>&nbsp;>
+        <span id ="profit">$0.00</span>
+    </h1>
+    
+    <hr>
+    
+    <p id="tidbits" style="display: none;">
+        <strong>Other fun tidbits:</strong><br>
+        You are earning...<br>
+        $<span id="perminute"></span> per <strong>minute</strong><br>
+        $<span id="persecond"></span> per <strong>second</strong><br>
+        One dollar every <span id="dollartime"></span>&nbsp;(<span id="dollartimesec"></span>&nbsp;seconds).
+    </p>
+    
+    <script type="text/javascript">
+        var time = document.getElementById('time'),
+        profit = document.getElementById('profit'),
+        start = document.getElementById('start'),
+        pause = document.getElementById('pause'),
+        clear = document.getElementById('clear'),
+        tidbits = document.getElementById('tidbits'),
+        perminute = document.getElementById('perminute'),
+        persecond = document.getElementById('persecond'),
+        dollartime = document.getElementById('dollartime'),
+        dollartimesec = document.getElementById('dollartimesec'),
+        inputsal = document.getElementById('sal'),
+        inputhour = document.getElementById('hour'),
+        inputyear = document.getElementById('year'),
+        income = 0,
+        seconds = 0,
+        minutes = 0,
+        hours = 0,
+        t;
+        
+        function tick() {
+            seconds++;
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes++;
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours++;
+                }
+            }
+          
+            time.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+          
+            addprofit();
+            timer();
+        }
+        
+        function timer() {
+            t = setTimeout(tick, 1000);
+        }
+        
+        function getincome() {
+            if (document.getElementById('hour').checked) {
+                income = document.getElementById('sal').value;
+            }
+            else if (document.getElementById('year').checked) {
+                income = document.getElementById('sal').value / 2080;
+            }
+        }
+        
+        function gettidbits() {
+            tidbits.style.display = "block";
+			perminute.textContent = parseFloat(income / 60).toFixed(5);
+			persecond.textContent = parseFloat(income / 3600).toFixed(5);
+            dollartimesec.textContent = parseFloat((1 / income) * 3600).toFixed(2);
+            dollartime.textContent = Math.floor(Math.abs((1 / income) * 60)).toPrecision() + "m" + Math.floor(Math.abs((1 / income) * 3600) % 60).toPrecision() + "s";
+		}
+        
+        function addprofit() {
+            profit.textContent = "$" + parseFloat(income * (hours + (minutes / 60) + (seconds / 3600))).toFixed(2);
+        }
+        
+        /* Start button */
+        start.onclick = function() {
+            start.disabled = true;
+            pause.disabled = false;
+            clear.disabled = false;
+            inputsal.disabled = true;
+            inputhour.disabled = true;
+            inputyear.disabled = true;
+            getincome();
+            gettidbits();
+            timer();
+        }
+        
+        /* pause button */
+        pause.onclick = function() {
+            if (pause.textContent == "Pause") {
+                clearTimeout(t);
+                pause.textContent = "Resume";
+            }
+            else {
+                timer();
+                pause.textContent = "Pause";
+            }
+        }
+        
+        /* Clear button */
+        clear.onclick = function() {
+            clearTimeout(t);
+            start.disabled = false;
+            pause.disabled = true;
+            clear.disabled = true;
+            inputsal.disabled = false;
+            inputhour.disabled = false;
+            inputyear.disabled = false;
+            time.textContent = "00:00:00";
+            profit.textContent = "0.00";
+            seconds = 0; minutes = 0; hours = 0;
+            tidbits.style.display = "none";
+        }
+    </script>
+</body>
+</html>
