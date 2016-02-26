@@ -5,8 +5,8 @@
     <title>Character Scramble Effect Generator</title>
 </head>
 <body>
-    <h1 id="output"></h1>
-    <input id="inputtxt" name="inputtxt" maxlength="25" value="Lorem ipsum?">
+    <h1 id="output" style="font-family: 'Lucida Console', Monaco, monospace;"></h1>
+    <input id="inputtxt" name="inputtxt" maxlength="25" value='<Lorem.ipsum = "/dolor">'>
     <button id="genbtn">Generate</button>
     
     <script type="text/javascript">
@@ -41,7 +41,7 @@
 		}
         
         function getrand() {
-			return Math.floor(Math.random() * (limit + 25));
+			return Math.floor(Math.random() * (limit - 25));
 		}
         
         function scrambletick() {
@@ -56,13 +56,15 @@
 					}
                 }
                 
-                if (scramblechars[i] != inputchars[i]) {
-                    scramblechars[i] = randchars[Math.floor(Math.random()*randchars.length)];
+                if (scramblechars[i] != inputchars[i] && limit <= 85) {
+					scramblechars[i] = randchars[Math.floor(Math.random()*randchars.length)];
+					
+					if (limit >= getrand || limit <= 65) {
+						scramblechars[i] = input.value.split('')[i];
+						limit += 35;
+					}
                 }
                 
-                if (limit >= getrand || limit <= 35) {
-                    scramblechars[i] = input.value.split('')[i];
-                }
                 
             }
             
