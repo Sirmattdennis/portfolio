@@ -37,10 +37,17 @@ __URL:__ www.eagleproductivity.com/interactive.html
 
 ---
 
-#### ASP162 and Welwynd Images ####
+#### ASP162 And Other Images ####
 A few samples of more artistically driven projects. 
+
 The ASP image is one of the last pages from my now discontinued webcomic.
+
 The Welwynd image was a map made from scratch for a tabletop RPG campaign.
+
+Eaglehands was a sample of drawn hands that we would occasionally use at Eagle
+in eLearning courses to show tapping a device, as an alternative to a cropped photo of a hand.
+
+Briermisk is a quick sketch-up of a creature for a campaign.
 
 ---
 
