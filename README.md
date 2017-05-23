@@ -5,13 +5,15 @@ Code files, images, links, and anything else I have to share
 ---
 
 #### "CTC" Images:
-My currently ongoing task is a complete redesign of the Connection Technology Center website. 
-No simple challenge, considering I am the sole web dev dedicated to it. Design-wise, 
+My ongoing task was a complete redesign of the Connection Technology Center website. 
+No simple challenge, considering I was the sole web dev dedicated to it. Design-wise, 
 the entirety of what I had to go on was a single PSD containing three page layouts for a browser 
 of exactly 1300px wide, and the instruction to "make sure it's responsive". 
-The old outdated design is still active, so until the new one is finalized, 
-I can only provide page screenshots. These screenshots show the responsiveness of the design, 
-displaying a page in narrow, medium, and wide browsers. More can be taken and provided upon request.
+These screenshots show the responsiveness of the design, 
+displaying a page in narrow, medium, and wide browsers. Visit the company website to see the
+final result.
+
+__URL:__ http://ctconline.com
 
 *(__PLEASE NOTE:__ If you visit the current company website, bear in mind that I did not build it.)*
 
@@ -35,6 +37,13 @@ __URL:__ www.eagleproductivity.com/interactive.html
 
 ---
 
+#### ASP162 and Welwynd Images ####
+A few samples of more artistically driven projects. 
+The ASP image is one of the last pages from my now discontinued webcomic.
+The Welwynd image was a map made from scratch for a tabletop RPG campaign.
+
+---
+
 #### A Skewed Paradise Comics:
 Running from 2007-2010, A Skewed Paradise was a webcomic and personal website. 
 While it is now a bit dated in both design and tech, it was a long-running 
@@ -44,7 +53,7 @@ hosting changes, and new technologies. It peaked at around 10,000 readers,
 and had an active forum with about 50,000 total posts. 
 It utilized Drupal as its CMS, and all art within ASP is indeed mine.
 
-__URL:__ www.aspcomics.net
+__URL:__ www.aspcomics.net (no longer active)
 
 ---
 
