@@ -27,6 +27,9 @@ __asp162:__ One of the last pages from my now discontinued webcomic.
 __aspcast:__ A cast shot of my old webcomic.
 The first thing I made when I received and set up my Cintiq.
 
+__berdusk images:__ Four variants of a label made to be printed out and placed onto growler bottles,
+featuring a fictional product, Berduskan Dark, and an image of the final result.
+
 __concept_jack_colors:__ A set of character concept art for a friend, with several color sets.
 
 __ctc images:__ See below this list.
