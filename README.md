@@ -17,37 +17,37 @@ __URL:__ www.eagleproductivity.com/interactive.html
 #### Images Folder ####
 A few samples of more artistically driven projects.
 
-asp162: One of the last pages from my now discontinued webcomic.
+__asp162:__ One of the last pages from my now discontinued webcomic.
 
-aspcast: A cast shot of my old webcomic.
+__aspcast:__ A cast shot of my old webcomic.
 The first thing I made when I received and set up my Cintiq.
 
-concept_jack_colors: A set of character concept art for a friend, with several color sets.
+__concept_jack_colors:__ A set of character concept art for a friend, with several color sets.
 
-ctc images: See below this list.
+__ctc images:__ See below this list.
 
-eaglehands: A sample of drawn hands that we would occasionally use at Eagle
+__eaglehands:__ A sample of drawn hands that we would occasionally use at Eagle
 in eLearning courses to show tapping a device, as an alternative to a cropped photo of a hand.
 
-everw images: See below this list.
+__everw images: See below this list.
 
-happytrees: A series of images showing a template I had created for quickly creating detailed,
+__happytrees:__ A series of images showing a template I had created for quickly creating detailed,
 unique trees to be used in backgrounds of drawn projects. The third image shows three trees
 that were assembled in about a minute each. Ideally these look best as background elements, not
 shown extremely close.
 
-image_briermisk: A quick sketch-up of a creature for a campaign.
+__image_briermisk:__ A quick sketch-up of a creature for a campaign.
 
-py2d images: -anim is a short intro animation made for a YouTube channel in Flash and exported to mp4.
+__py2d images:__ -anim is a short intro animation made for a YouTube channel in Flash and exported to mp4.
 The mp4 does not have the dithering that this gif shows. The -pixel file is a logo for the same
 channel, given a pixelated retro look.
 
-welwynd_v4: A map made from scratch for a tabletop RPG campaign.
+__welwynd_v4:__ A map made from scratch for a tabletop RPG campaign.
 
-wip-lineart: There's something wonderful about clean lineart from a sketch,
+__wip-lineart:__ There's something wonderful about clean lineart from a sketch,
 before colors get added.
 
-wyrid: A spooky thing, in a spooky place, holding a spooky stick.
+__wyrid:__ A spooky thing, in a spooky place, holding a spooky stick.
 
 ---
 
