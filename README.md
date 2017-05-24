@@ -29,7 +29,7 @@ __ctc images:__ See below this list.
 __eaglehands:__ A sample of drawn hands that we would occasionally use at Eagle
 in eLearning courses to show tapping a device, as an alternative to a cropped photo of a hand.
 
-__everw images: See below this list.
+__everw images:__ See below this list.
 
 __happytrees:__ A series of images showing a template I had created for quickly creating detailed,
 unique trees to be used in backgrounds of drawn projects. The third image shows three trees
