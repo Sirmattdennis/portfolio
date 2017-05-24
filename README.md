@@ -4,6 +4,53 @@ Code files, images, links, and anything else I have to share
 
 ---
 
+#### Eagle Productivity Solutions:
+As part of the team of interactive developers, I helped to create interactive learning tools 
+for clients primarily in the field of pharmaceuticals. Projects included e-learning courses, 
+to e-blasts, software simulations, and more. As much of the work is built for private use, 
+I can only share samples from Eagle's public "Portfolio" page. 
+
+__URL:__ www.eagleproductivity.com/interactive.html
+
+---
+
+#### Images Folder ####
+A few samples of more artistically driven projects.
+
+asp162: One of the last pages from my now discontinued webcomic.
+
+aspcast: A cast shot of my old webcomic.
+The first thing I made when I received and set up my Cintiq.
+
+concept_jack_colors: A set of character concept art for a friend, with several color sets.
+
+ctc images: See below this list.
+
+eaglehands: A sample of drawn hands that we would occasionally use at Eagle
+in eLearning courses to show tapping a device, as an alternative to a cropped photo of a hand.
+
+everw images: See below this list.
+
+happytrees: A series of images showing a template I had created for quickly creating detailed,
+unique trees to be used in backgrounds of drawn projects. The third image shows three trees
+that were assembled in about a minute each. Ideally these look best as background elements, not
+shown extremely close.
+
+image_briermisk: A quick sketch-up of a creature for a campaign.
+
+py2d images: -anim is a short intro animation made for a YouTube channel in Flash and exported to mp4.
+The mp4 does not have the dithering that this gif shows. The -pixel file is a logo for the same
+channel, given a pixelated retro look.
+
+welwynd_v4: A map made from scratch for a tabletop RPG campaign.
+
+wip-lineart: There's something wonderful about clean lineart from a sketch,
+before colors get added.
+
+wyrid: A spooky thing, in a spooky place, holding a spooky stick.
+
+---
+
 #### "CTC" Images:
 My ongoing task was a complete redesign of the Connection Technology Center website. 
 No simple challenge, considering I was the sole web dev dedicated to it. Design-wise, 
@@ -27,30 +74,6 @@ __URL:__ www.everwildeinnandspa.com
 
 ---
 
-#### Eagle Productivity Solutions:
-As part of the team of interactive developers, I helped to create interactive learning tools 
-for clients primarily in the field of pharmaceuticals. Projects included e-learning courses, 
-to e-blasts, software simulations, and more. As much of the work is built for private use, 
-I can only share samples from Eagle's public "Portfolio" page. 
-
-__URL:__ www.eagleproductivity.com/interactive.html
-
----
-
-#### ASP162 And Other Images ####
-A few samples of more artistically driven projects. 
-
-The ASP image is one of the last pages from my now discontinued webcomic.
-
-The Welwynd image was a map made from scratch for a tabletop RPG campaign.
-
-Eaglehands was a sample of drawn hands that we would occasionally use at Eagle
-in eLearning courses to show tapping a device, as an alternative to a cropped photo of a hand.
-
-Briermisk is a quick sketch-up of a creature for a campaign.
-
----
-
 #### A Skewed Paradise Comics:
 Running from 2007-2010, A Skewed Paradise was a webcomic and personal website. 
 While it is now a bit dated in both design and tech, it was a long-running 
@@ -60,7 +83,7 @@ hosting changes, and new technologies. It peaked at around 10,000 readers,
 and had an active forum with about 50,000 total posts. 
 It utilized Drupal as its CMS, and all art within ASP is indeed mine.
 
-__URL:__ www.aspcomics.net (no longer active)
+__URL:__ www.aspcomics.net (site no longer active)
 
 ---
 
