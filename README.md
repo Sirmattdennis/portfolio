@@ -2,6 +2,10 @@
 
 Code files, images, links, and anything else I have to share
 
+__What am I looking at?__
+If you're unfamiliar with what all this is, and how to look at any of it,
+the easiest way for you will be to click the green button that says __Clone or download__.
+Then click __Download ZIP__ and drag the downloaded __portfolio-master__ folder wherever you like.
 ---
 
 #### Eagle Productivity Solutions:
