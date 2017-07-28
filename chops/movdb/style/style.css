@@ -1,0 +1,78 @@
+body {
+  color: #000000;
+  background-color: #DDDDEE;
+}
+
+h1 {
+
+}
+
+h2 {
+  font-weight: 600;
+  text-align: center;
+}
+
+.invalid {
+  display: none;
+  color: #BB3333;
+}
+
+.movsearch {
+  display: block;
+  margin: auto;
+}
+
+.movsearch > input {
+  display: inline-block;
+}
+
+.movsearch > .searchbar {
+  width: 400px;
+  max-width: 100%;
+}
+
+#counter {
+  display: none;
+}
+
+#counter > span {
+  font-weight: 600;
+}
+
+.navigation {
+  display: block;
+  text-align: center;
+  margin: auto;
+}
+
+.movlist-item {
+  display: block;
+  background-color: #EEEEEE;
+  outline-style: solid;
+  outline-width: 10px;
+  outline-color: #DDDDEE;
+}
+
+.movlist-item h4 {
+  text-align: center;
+}
+
+.movlist-item > .posterimg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: auto;
+  margin-bottom: 20px;
+}
+
+.movlist-item > .voteavg {
+  margin-bottom: 20px;
+}
+
+@media (min-width: 1200px) {
+
+  .movlist-item {
+    height: 800px;
+  }
+
+}

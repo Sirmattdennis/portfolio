@@ -1,0 +1,35 @@
+<html>
+<head>
+  <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style/style.css">
+</head>
+
+<body>
+<div class="container-fluid">
+  <h2>NOW PLAYING</h2>
+
+  <div class="navigation">
+    <p class="counter">Displaying Results <span id="count-from"></span> - <span id="count-to"></span> of <span id="count-total"></span></p>
+    <ul id="pagination-top" class="pagination pagination-sm"></ul>
+  </div>
+
+  <div id="movie-list"></div>
+
+</div>
+
+
+<!-- ========================================= -->
+
+  <script src="vendor/jquery-3.2.1.min.js"></script>
+  <script src="vendor/jquery.twbsPagination.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+  <script src="js/get-movies.js"></script>
+  <script src="js/pagination.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      GetMovieList(1, true);
+    });
+  </script>
+</body>
+</html>
